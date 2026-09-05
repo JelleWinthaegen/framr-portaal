@@ -1,0 +1,340 @@
+/* Framr.one ontwerpsysteem, tokens uit het Claude Design-ontwerp van Jelle (besluit 2026-08-21).
+   Oranje is het enige accent; maten en labels altijd in mono. */
+
+:root {
+  --grond: #F6F6F8;
+  --vlak: #FFFFFF;
+  --inkt: #1B1B1F;
+  --tekst: #4E4E56;
+  --label: #6E6E76;
+  --stil: #8B8B93;
+  --lijn: #E0E0E6;
+  --lijn-zacht: #E8E8ED;
+  --maatlijn: #C2C2BA;
+  --oranje: #EA5B10;
+  --oranje-donker: #CE4A08;
+  --oranje-zacht: #FDEBE0;
+  --kop: "Familjen Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --lopend: "Public Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", "SF Mono", Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+
+/* Het hidden-attribuut moet ook winnen van een klasse die display zet. Zonder deze regel blijft een
+   verborgen .fr-veldrij gewoon staan: display:flex uit de klasse overschrijft de standaardregel van
+   de browser, en dan verbergt hidden niets meer. */
+[hidden] { display: none !important; }
+
+html, body {
+  margin: 0;
+  background: var(--grond);
+  color: var(--inkt);
+  font-family: var(--lopend);
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+h1, h2, h3, .fr-merk, .fr-knop, .fr-tab, .fr-seg button { font-family: var(--kop); }
+
+a { color: var(--inkt); text-decoration: none; }
+a:hover { color: var(--oranje); }
+
+/* De maatlijn langs de linkerkant: de basislijn met streepjes, en de oranje
+   voortgang die meetekent met het scrollen. */
+.fr-rail { position: fixed; top: 0; left: 40px; bottom: 0; width: 60px; z-index: 40; pointer-events: none; }
+.fr-rail .basis { position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--lijn); }
+.fr-rail .voortgang { position: absolute; left: 0; top: 0; width: 1px; height: 0; background: var(--oranje); }
+.fr-rail .tick { position: absolute; left: 1px; width: 8px; height: 1px; background: var(--maatlijn); }
+.fr-rail .tick.groot { width: 14px; }
+.fr-rail .maat { position: absolute; left: 20px; transform: translateY(-50%); font-family: var(--mono); font-size: 10px; letter-spacing: .1em; color: var(--stil); }
+
+/* Kop van de pagina */
+.fr-top { position: sticky; top: 0; z-index: 50; background: var(--grond); border-bottom: 1px solid var(--lijn); }
+.fr-top-binnen { max-width: 1140px; margin: 0 auto; padding: 0 24px 0 130px; display: flex; align-items: center; gap: 18px; height: 62px; }
+.fr-merk { font-weight: 600; font-size: 19px; letter-spacing: -0.01em; }
+.fr-merk .one { color: var(--oranje); }
+.fr-merk-label { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; color: var(--label); text-transform: uppercase; }
+.fr-productgroep { margin-left: auto; display: flex; gap: 10px; align-items: center; }
+.fr-chip { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; padding: 5px 12px; border-radius: 999px; border: 1px solid var(--lijn); color: var(--label); background: var(--vlak); }
+.fr-chip.actief { border-color: var(--oranje); color: var(--oranje); background: var(--oranje-zacht); }
+
+/* Tabbladen als echte links */
+.fr-nav { border-bottom: 1px solid var(--lijn); background: var(--grond); position: sticky; top: 62px; z-index: 49; }
+.fr-nav-binnen { max-width: 1140px; margin: 0 auto; padding: 0 24px 0 130px; display: flex; gap: 4px; overflow-x: auto; }
+.fr-tab { display: block; padding: 12px 14px 10px; font-size: 14.5px; color: var(--tekst); border-bottom: 2px solid transparent; white-space: nowrap; }
+.fr-tab:hover { color: var(--inkt); }
+.fr-tab.actief { color: var(--inkt); border-bottom-color: var(--oranje); font-weight: 600; }
+
+/* Inhoud */
+.fr-inhoud { max-width: 1140px; margin: 0 auto; padding: 36px 24px 90px 130px; }
+.fr-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; color: var(--oranje); text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
+.fr-eyebrow::before { content: ""; width: 26px; height: 1px; background: var(--oranje); }
+h1.fr-kop { font-size: 34px; line-height: 1.12; letter-spacing: -0.02em; margin: 10px 0 6px; text-wrap: balance; }
+.fr-onderkop { color: var(--tekst); max-width: 62ch; margin: 0 0 26px; }
+
+/* Tegels op het overzicht */
+.fr-tegels { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; margin: 22px 0 34px; }
+.fr-tegel { background: var(--vlak); border: 1px solid var(--lijn); border-radius: 10px; padding: 16px 18px 14px; }
+.fr-tegel .naam { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; color: var(--label); text-transform: uppercase; }
+.fr-tegel .waarde { font-size: 27px; font-weight: 600; letter-spacing: -0.02em; margin-top: 6px; font-variant-numeric: tabular-nums; }
+.fr-tegel .waarde small { font-size: 14px; font-weight: 400; color: var(--label); }
+
+/* Rustige rijen in plaats van tabellen (besluit 2026-08-18) */
+.fr-rijen { display: flex; flex-direction: column; gap: 10px; }
+.fr-rij { background: var(--vlak); border: 1px solid var(--lijn); border-radius: 10px; padding: 14px 18px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.fr-rij .hoofd { font-weight: 600; min-width: 180px; }
+.fr-rij .sub { color: var(--label); font-size: 14px; }
+.fr-rij .maatje { font-family: var(--mono); font-size: 12px; color: var(--label); letter-spacing: .06em; font-variant-numeric: tabular-nums; }
+/* De knoppen achteraan een rij mogen afbreken. Zonder wrap duwden vier knoppen (de inmetingrij op
+   de klantkaart) de pagina op een telefoon een stuk breder dan het scherm. */
+.fr-rij .rechts { margin-left: auto; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+.fr-stand { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; padding: 4px 10px; border-radius: 999px; text-transform: uppercase; }
+.fr-stand.open { background: var(--oranje-zacht); color: var(--oranje-donker); }
+.fr-stand.klaar { background: #E9F0E9; color: #3D6B45; }
+.fr-stand.stil { background: var(--lijn-zacht); color: var(--label); }
+
+/* Knoppen */
+.fr-knop { display: inline-block; border: 0; cursor: pointer; font-family: var(--kop); font-size: 14.5px; font-weight: 600; border-radius: 9px; padding: 10px 18px; background: var(--oranje); color: #fff; box-shadow: 0 6px 16px rgba(234, 91, 16, .25); }
+.fr-knop:hover { background: var(--oranje-donker); color: #fff; }
+.fr-knop.tweede { background: var(--vlak); color: var(--inkt); border: 1px solid var(--lijn); box-shadow: none; }
+.fr-knop.tweede:hover { border-color: var(--stil); color: var(--inkt); }
+.fr-knop.klein { font-size: 13px; padding: 7px 13px; }
+
+/* Sectiekop binnen een tabblad */
+.fr-blokkop { display: flex; align-items: baseline; gap: 14px; margin: 34px 0 14px; }
+.fr-blokkop h2 { font-size: 19px; letter-spacing: -0.01em; margin: 0; }
+.fr-blokkop .maatje { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; color: var(--stil); }
+.fr-blokkop .rechts { margin-left: auto; }
+
+/* De snelkaarten op het overzicht: waar je aan een klus begint. Geen tegel met een getal maar een
+   deur met een zin eronder, want dit is het enige blok op het scherm waar je op klikt om te
+   beginnen in plaats van om te kijken. */
+.fr-snel { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin: 0 0 10px; }
+.fr-kaart { display: block; background: var(--vlak); border: 1px solid var(--lijn); border-radius: 10px; padding: 18px 20px; }
+.fr-kaart:hover { border-color: var(--oranje); color: var(--inkt); }
+.fr-kaart .k { display: block; font-family: var(--kop); font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+.fr-kaart .o { display: block; font-size: 14px; color: var(--label); line-height: 1.5; }
+
+/* Twee panelen naast elkaar onder de snelkaarten. Op een telefoon vallen ze onder elkaar. */
+.fr-twee { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+@media (max-width: 860px) { .fr-twee { grid-template-columns: 1fr; gap: 0; } }
+
+/* De schakels onder Mijn bedrijf: wat gebruik je. Aan is de gewone stand, dus die is rustig; uit
+   valt op doordat de kaart dooft, want dat is de afwijking die je moet kunnen zien. */
+.fr-schakels { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-bottom: 10px; }
+.fr-schakel {
+  text-align: left; background: var(--vlak); border: 1px solid var(--lijn); border-radius: 10px;
+  padding: 15px 17px; cursor: pointer; font-family: var(--lopend); color: var(--inkt);
+}
+.fr-schakel:hover { border-color: var(--oranje); }
+.fr-schakel .k { display: flex; align-items: baseline; gap: 10px; font-family: var(--kop); font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.fr-schakel .stand { font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--stil); margin-left: auto; }
+.fr-schakel.aan .stand { color: var(--oranje); }
+.fr-schakel .o { display: block; font-size: 13.5px; color: var(--label); line-height: 1.5; }
+.fr-schakel:not(.aan) { background: transparent; border-style: dashed; }
+.fr-schakel:not(.aan) .k, .fr-schakel:not(.aan) .o { color: var(--stil); }
+
+/* De balk boven een lijst: zoeken links, de filterknop en het sorteren ernaast. De standen komen
+   uit in een rij eronder, in het vlak zelf, zodat er niets over de lijst heen zweeft. */
+.fr-zoekbalk { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
+.fr-zoekbalk input[type="search"], .fr-zoekbalk select {
+  min-height: 40px; padding: 8px 12px; border: 1px solid var(--lijn); border-radius: 8px;
+  background: var(--vlak); color: var(--inkt); font-family: var(--lopend); font-size: 15px;
+}
+.fr-zoekbalk input[type="search"] { flex: 1; min-width: 200px; max-width: 340px; }
+.fr-zoekbalk input[type="search"]:focus, .fr-zoekbalk select:focus { outline: none; border-color: var(--oranje); }
+.fr-filterrij { flex-basis: 100%; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; padding: 10px 12px; background: var(--vlak); border: 1px solid var(--lijn); border-radius: 8px; }
+
+/* Leeg scherm dat vertelt wat er komt */
+.fr-leeg { background: var(--vlak); border: 1px dashed var(--lijn); border-radius: 10px; padding: 34px 28px; color: var(--tekst); max-width: 66ch; }
+.fr-leeg .naam { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; color: var(--oranje); text-transform: uppercase; margin-bottom: 8px; }
+
+/* Formulieren */
+.fr-login { max-width: 520px; margin-top: 8vh; }
+.fr-form { display: flex; flex-direction: column; gap: 14px; margin-top: 18px; max-width: 520px; }
+.fr-form-breed { max-width: 860px; }
+.fr-form label { display: flex; flex-direction: column; gap: 6px; font-size: 13.5px; font-weight: 500; color: var(--label); flex: 1; min-width: 140px; }
+.fr-form input, .fr-form select, .fr-form textarea {
+  font-family: var(--kop); font-size: 15px; color: var(--inkt);
+  background: var(--vlak); border: 1px solid var(--lijn); border-radius: 9px; padding: 10px 12px;
+}
+.fr-form input:focus, .fr-form select:focus, .fr-form textarea:focus { outline: 2px solid var(--oranje); outline-offset: 0; border-color: var(--oranje); }
+/* Een los veld buiten een formulier, met alleen de invultekst als label. Voor blokken waar de rij
+   zichzelf uitlegt, zoals het nieuw-klus-blok boven de klussenlijst. */
+.fr-in {
+  font-family: var(--kop); font-size: 15px; color: var(--inkt); flex: 1; min-width: 150px;
+  background: var(--vlak); border: 1px solid var(--lijn); border-radius: 9px; padding: 10px 12px;
+}
+.fr-in:focus { outline: 2px solid var(--oranje); outline-offset: 0; border-color: var(--oranje); }
+/* Een keuzelijst die in een rij meeloopt, naast de knoppen. */
+.fr-in.klein { padding: 6px 9px; font-size: 12.5px; max-width: 190px; }
+.fr-veldlabel { display: flex; flex-direction: column; gap: 6px; font-size: 13.5px; font-weight: 500; color: var(--label); flex: 1; min-width: 140px; }
+.fr-veldrij { display: flex; gap: 12px; flex-wrap: wrap; }
+.fr-veldrij + .fr-veldrij { margin-top: 12px; }
+
+/* Bladeren onder een lijst, en de uitleg die eronder hoort te staan. */
+/* Een rij losse keuzeknoppen, zoals de stappen van een klus. */
+.fr-chips { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 8px; }
+
+.fr-blader { display: flex; justify-content: flex-end; align-items: center; gap: 14px; margin-top: 14px; }
+.fr-blader:empty { display: none; }
+.fr-note { border-left: 2px solid var(--oranje); padding: 2px 0 2px 14px; margin: 26px 0 0;
+  font-size: 14px; color: var(--tekst); max-width: 74ch; line-height: 1.55; }
+.fr-note b { color: var(--inkt); }
+.fr-knoppenrij { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 6px; }
+.fr-formfout { color: var(--oranje-donker); font-size: 14px; min-height: 1.2em; }
+.fr-logoveld { display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; }
+.fr-logovak {
+  width: 150px; height: 76px; border: 1px dashed var(--lijn); border-radius: 9px; background: var(--vlak);
+  display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 8px; flex: none;
+}
+.fr-logovak img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.fr-logovak span { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--label); }
+.fr-logoveld > div { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; flex: 1; min-width: 220px; }
+.fr-logoveld .fr-hint { max-width: 52ch; }
+.fr-vinkbtw {
+  font-family: var(--mono); font-size: 11px; color: var(--label);
+  background: var(--vlak); border: 1px solid var(--lijn); border-radius: 7px; padding: 4px 6px;
+}
+.fr-ruimte { border: 1px solid var(--lijn); border-radius: 10px; padding: 14px 16px 10px; background: var(--vlak); display: flex; flex-direction: column; gap: 10px; }
+.fr-ruimte legend { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--oranje); padding: 0 6px; }
+.fr-ruimtesom { margin: 0; font-family: var(--mono); font-size: 12px; color: var(--label); }
+
+/* De calculator: invoer links, de bestelling rechts */
+.fr-calc { display: grid; grid-template-columns: 1fr 1.05fr; gap: 0; border: 1px solid var(--lijn); border-radius: 12px; background: var(--vlak); overflow: hidden; }
+.fr-calc-in { padding: 26px; border-right: 1px solid var(--lijn); }
+.fr-calc-uit { padding: 26px; background: var(--grond); }
+.fr-calc-pt { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--oranje); margin: 22px 0 12px; }
+.fr-calc-pt:first-child { margin-top: 0; }
+.fr-hint { font-family: var(--mono); font-size: 11.5px; color: var(--stil); letter-spacing: .02em; font-weight: 400; }
+.fr-seg { display: flex; flex-wrap: wrap; gap: 6px; }
+.fr-seg button { flex: 1 1 auto; min-width: 90px; padding: 9px 10px; border: 1px solid var(--lijn); background: var(--vlak); color: var(--tekst); border-radius: 8px; font-family: var(--kop); font-size: 13.5px; font-weight: 500; cursor: pointer; }
+.fr-seg button:hover { border-color: var(--oranje); }
+.fr-seg button.aan { background: var(--oranje); border-color: var(--oranje); color: #fff; }
+.fr-seg.klein button { flex: 0 0 auto; min-width: 0; font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; padding: 5px 10px; }
+.fr-acc { border: 1px solid var(--lijn-zacht); border-radius: 10px; padding: 12px 14px; background: var(--grond); display: flex; flex-direction: column; gap: 8px; }
+.fr-acc .kop { flex-direction: row; align-items: center; gap: 8px; font-size: 14.5px; font-weight: 600; color: var(--inkt); }
+.fr-acc .kop input { width: 16px; height: 16px; accent-color: var(--oranje); }
+.fr-acc .advies { font-family: var(--mono); font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--oranje-donker); border: 1px solid var(--oranje); border-radius: 4px; padding: 1px 6px; }
+.fr-acc:has(.kop input:not(:checked)) { opacity: .55; }
+/* Per toebehoren: levert de klant het zelf. Klein en rechts, want het is de uitzondering. */
+.fr-acc .fr-acc-klant { margin-left: auto; font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--label); font-weight: 400; display: inline-flex; align-items: center; gap: 5px; }
+.fr-acc .fr-acc-klant input { width: 13px; height: 13px; }
+.fr-acc:has(.fr-acc-klant input:checked) .fr-acc-klant { color: var(--oranje-donker); }
+.fr-calc-verlies { font-family: var(--mono); font-size: 12px; color: var(--oranje-donker); background: var(--vlak); border: 1px solid var(--lijn); border-radius: 8px; padding: 10px 12px; margin: 12px 0 8px; line-height: 1.5; }
+/* De kop boven de regels van een vloer, als een klus er meer dan een heeft. */
+.fr-calc-vloerkop { font-size: 13px; font-weight: 600; color: var(--inkt); margin: 18px 0 0; padding-top: 14px; border-top: 2px solid var(--lijn); }
+.fr-calc-vloerkop:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.fr-calc-vloerkop .qty { font-family: var(--mono); font-size: 11px; font-weight: 400; color: var(--stil); margin-left: 6px; }
+.fr-calc-verlies:empty { display: none; }
+/* Wat er aanstond maar niet te rekenen viel; hoort op te vallen, want het scheelt in de bestelling. */
+.fr-calc-mist { font-family: var(--mono); font-size: 12px; color: #8A3B12; background: #FDF1E7; border: 1px solid var(--oranje); border-radius: 8px; padding: 10px 12px; margin: 12px 0 4px; line-height: 1.6; }
+/* Een toebehoren dat niet in de prijslijst staat: zichtbaar uit, niet stilzwijgend weg. */
+.fr-acc.fr-acc-leeg { opacity: .55; }
+.fr-calc-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 11px 0; border-bottom: 1px solid var(--lijn-zacht); }
+.fr-calc-row .k { font-size: 13.5px; color: var(--inkt); flex: 1; padding-right: 12px; }
+.fr-calc-row .k small { display: block; color: var(--stil); font-family: var(--mono); font-size: 11px; line-height: 1.5; margin-top: 3px; }
+.fr-calc-row .k .qty { font-family: var(--mono); color: var(--oranje-donker); font-size: 12px; margin-left: 4px; }
+.fr-calc-row .v { font-family: var(--mono); font-size: 15px; font-weight: 500; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.fr-calc-tot { margin-top: 18px; padding: 18px 20px; background: var(--vlak); border: 1px solid var(--oranje); border-radius: 10px; }
+.fr-calc-tot .regel { font-family: var(--mono); font-size: 12px; color: var(--label); line-height: 1.8; }
+.fr-calc-tot .regel.groen { color: #3D6B45; }
+/* Een regel met het bedrag aan de rechterkant, voor de btw-uitsplitsing op een factuur. */
+.fr-calc-tot .regel.tweekant { display: flex; justify-content: space-between; gap: 14px; font-variant-numeric: tabular-nums; }
+.fr-calc-tot .som { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; padding: 10px 0 0; font-size: 13.5px; color: var(--tekst); }
+.fr-calc-tot .som b { font-family: var(--mono); font-size: 17px; color: var(--inkt); font-variant-numeric: tabular-nums; }
+.fr-calc-tot .som.marge { border-top: 1px solid var(--lijn-zacht); margin-top: 8px; padding-top: 10px; }
+.fr-calc-tot .som.marge span { font-weight: 600; color: var(--inkt); }
+.fr-calc-tot .som.marge b { color: var(--oranje-donker); }
+@media (max-width: 900px) {
+  .fr-calc { grid-template-columns: 1fr; }
+  .fr-calc-in { border-right: 0; border-bottom: 1px solid var(--lijn); }
+}
+
+/* De vaststel-vragen en de werkzaamheden-checklist van de inmeetkaart */
+.fr-vast { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 26px; margin: 14px 0 6px; }
+.fr-vast .vraag .v { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--label); margin-bottom: 8px; }
+.fr-vast .keuzes { display: flex; flex-wrap: wrap; gap: 6px; }
+.fr-keuze { padding: 8px 13px; border: 1px solid var(--lijn); background: var(--vlak); color: var(--tekst); border-radius: 8px; font-family: var(--kop); font-size: 13.5px; font-weight: 500; cursor: pointer; }
+.fr-keuze:hover { border-color: var(--oranje); }
+.fr-keuze.aan { background: var(--oranje); border-color: var(--oranje); color: #fff; }
+.fr-checklist { display: grid; grid-template-columns: 1fr 1fr; gap: 0 30px; margin-top: 6px; }
+.fr-checklist .cgroep { grid-column: 1 / -1; font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--oranje-donker); margin: 18px 0 4px; }
+.fr-checklist label { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; font-size: 14px; color: var(--tekst); cursor: pointer; border-bottom: 1px solid var(--lijn-zacht); font-weight: 400; flex-direction: row; }
+.fr-checklist label b { color: var(--inkt); font-weight: 500; }
+.fr-checklist label .o { display: block; font-size: 12px; color: var(--stil); margin-top: 2px; }
+.fr-checklist input[type="checkbox"] { accent-color: var(--oranje); width: 17px; height: 17px; margin-top: 2px; flex: none; }
+.fr-checklist .cvoorstel { font-family: var(--mono); font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--oranje-donker); border: 1px solid var(--oranje); border-radius: 4px; padding: 1px 6px; margin-left: 7px; }
+.fr-checklist .cnum { width: 62px; margin-left: 8px; padding: 3px 7px; border: 1px solid var(--lijn); border-radius: 6px; font-family: var(--mono); font-size: 12px; }
+@media (max-width: 760px) { .fr-vast, .fr-checklist { grid-template-columns: 1fr; } }
+
+/* Aanvinkrijen op het factuurscherm */
+.fr-vinkrij { cursor: pointer; }
+.fr-vinkrij input { width: 17px; height: 17px; accent-color: var(--oranje); }
+.fr-vinkrij.stil { opacity: .55; }
+
+/* Korte melding onderin beeld */
+.fr-melding { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%);
+  background: var(--inkt); color: #fff; font-size: 14px; padding: 10px 18px; border-radius: 9px;
+  box-shadow: 0 8px 24px rgba(20, 22, 26, .25); z-index: 90; }
+
+@media (max-width: 760px) {
+  .fr-rail { display: none; }
+  .fr-top-binnen, .fr-nav-binnen, .fr-inhoud { padding-left: 20px; }
+  h1.fr-kop { font-size: 27px; }
+  .fr-rij .hoofd { min-width: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fr-rail .voortgang { transition: none; }
+}
+
+/* De inmeetkaart op fase C (03-09-2026): de herkomst van een waarde staat erbij, en per ruimte is
+   er een paneel voor wat afwijkt. Een keuze die van boven komt staat gedempt aan; een eigen keuze
+   staat vol oranje. Zo is in een oogopslag te zien wat de vakman zelf heeft gezegd. */
+.fr-keuze.aan.geerfd { background: var(--oranje-zacht); border-color: var(--oranje); color: var(--oranje-donker); }
+.fr-herkomst { font-family: var(--mono); font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--stil); border: 1px dashed var(--lijn); border-radius: 4px; padding: 1px 6px; margin-left: 6px; vertical-align: middle; }
+.fr-erf { background: none; border: 0; padding: 0; margin-left: 8px; cursor: pointer; font-family: var(--mono); font-size: 10px; letter-spacing: .06em; color: var(--oranje-donker); text-decoration: underline; text-transform: none; vertical-align: middle; }
+.fr-erf:hover { color: var(--oranje); }
+.fr-checklist .cvoorstel.stil { color: var(--stil); border-color: var(--lijn); }
+.fr-taakgetal { display: inline-flex; align-items: center; gap: 4px; margin-left: 8px; font-family: var(--mono); font-size: 11px; color: var(--label); }
+.fr-ruimtevoet { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.fr-afwijk { margin-top: 8px; padding: 12px 14px 4px; border-top: 1px dashed var(--lijn); }
+.fr-afwijk .fr-vast { margin-top: 8px; }
+.fr-afwijk .fr-vast .vraag .v { font-size: 10px; }
+.fr-afwijk .fr-keuze { padding: 5px 10px; font-size: 12.5px; }
+.fr-checklist.compact label { padding: 6px 0; font-size: 13px; }
+.fr-checklist.compact .cgroep { margin: 10px 0 2px; }
+
+/* Verdiepingen (stap 2): een kop met de naam en haar ruimtes eronder. Zonder verdiepingen is er
+   geen kop en staan de ruimtes zoals ze altijd stonden. */
+.fr-zone + .fr-zone { margin-top: 18px; }
+.fr-zonekop { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 10px 14px; margin-bottom: 10px; background: var(--oranje-zacht); border: 1px solid var(--oranje); border-radius: 10px; }
+.fr-zonekop.stil { background: transparent; border: 1px dashed var(--lijn); }
+.fr-zonekop .fr-eyebrow::before { background: currentColor; }
+.fr-zonekop input.fr-in { flex: 1; min-width: 160px; max-width: 320px; font-weight: 600; }
+.fr-zonekop .fr-knoppenrij { margin-left: auto; }
+.fr-zoneruimtes { display: flex; flex-direction: column; gap: 10px; }
+.fr-zoneruimtes:empty { min-height: 0; }
+.fr-zone .fr-afwijk { margin: 0 0 10px; padding: 12px 14px 4px; border: 1px dashed var(--lijn); border-radius: 10px; background: var(--vlak); }
+#im-ruimtes { display: flex; flex-direction: column; gap: 10px; }
+
+/* Adresvoorstellen van PDOK onder een adresveld (05-09-2026). Vast gepositioneerd, zodat de rij
+   eromheen niet van hoogte verandert en de lijst boven alles uit komt. */
+.fr-adreslijst { position: fixed; z-index: 95; background: var(--vlak); border: 1px solid var(--lijn); border-radius: 9px; box-shadow: 0 10px 28px rgba(20, 22, 26, .14); overflow: hidden; }
+.fr-adreslijst .rij { display: flex; justify-content: space-between; gap: 12px; padding: 9px 12px; cursor: pointer; font-size: 14px; border-bottom: 1px solid var(--lijn-zacht); }
+.fr-adreslijst .rij b { font-weight: 600; color: var(--inkt); }
+.fr-adreslijst .rij span { font-family: var(--mono); font-size: 12px; color: var(--label); white-space: nowrap; }
+.fr-adreslijst .rij:hover, .fr-adreslijst .rij.actief { background: var(--oranje-zacht); }
+.fr-adreslijst .bron { font-family: var(--mono); font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--stil); padding: 5px 12px; }
+
+/* Vlakken en wanden (stap 3 en 4): panelen in de ruimte, alleen zichtbaar als hij ze openklapt.
+   Een rij per vlak of per wand, met de onderbrekingen van een wand ingesprongen eronder. */
+.fr-geo .fr-vlak, .fr-geo .fr-wand { align-items: flex-end; padding: 8px 0; border-bottom: 1px solid var(--lijn-zacht); }
+.fr-geo .fr-vlak .maatje, .fr-geo .fr-wand .maatje { align-self: center; min-width: 80px; text-align: right; }
+.fr-geo .fr-wand { display: flex; flex-direction: column; align-items: stretch; gap: 6px; }
+.fr-geo .fr-opening { margin-left: 24px; padding-left: 12px; border-left: 2px solid var(--lijn); align-items: flex-end; }
+.fr-geo .fr-seg.klein button { padding: 7px 10px; }
+.fr-geo [data-geosom] { margin: 10px 0 4px; color: var(--inkt); }
